@@ -1,0 +1,17 @@
+{
+  "name": "backend-memsys",
+  "version": "1.0.0",
+  "description": "Buat back end memsys",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "author": "Kochan",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.10.0"
+  }
+}
