@@ -7,7 +7,7 @@ export const getIndex = (req, res) => {
     res.status(200).json({
       status: "success",
       data: response,
-      message: "Berhasil",
+      message: "Penyambutan",
     });
   } catch (error) {
     console.error("Galat: ", error.message);
