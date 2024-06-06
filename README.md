@@ -27,7 +27,7 @@ POST http://localhost:5000/cashflow
 ```bash
 {
   "totalKas": 100000,
-  "tanggalAkhir": "2024/06/05",
+  "tanggalAkhir": "YYYY/MM/DD",
   "accountId": "101.002"
 }
 ```
@@ -42,9 +42,24 @@ POST http://localhost:5000/cashflow
 
 ```bash
 {
-  "tanggalAwal": "2024/06/05",
-  "tanggalAkhir": "2024/06/05",
+  "tanggalAwal": "YYYY/MM/DD",
+  "tanggalAkhir": "YYYY/MM/DD",
   "accountId": "101.002"
+}
+```
+
+### Mendapatkan Data Arus Kas
+
+```bash
+POST http://localhost:5000/arus-kas
+```
+
+#### Request Body
+
+```bash
+{
+  "tanggalAwal": "YYYY-MM-DD",
+  "tanggalAkhir": "YYYY-MM-DD",
 }
 ```
 
