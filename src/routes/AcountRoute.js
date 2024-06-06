@@ -3,6 +3,6 @@ import { acountsIndex } from "../controllers/AccountController.js";
 
 const router = express.Router();
 
-router.get("/acounts", acountsIndex);
+router.get("/accounts", acountsIndex);
 
 export default router;

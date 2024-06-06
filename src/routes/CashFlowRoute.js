@@ -1,8 +1,9 @@
 import express from "express";
-import { getCashflow } from "../controllers/CashFlowController.js";
+import { getCashflow, balanceCek } from "../controllers/CashFlowController.js";
 
 const router = express.Router();
 
 router.post("/cashflow", getCashflow);
+router.post("/balance-cek", balanceCek);
 
 export default router;
