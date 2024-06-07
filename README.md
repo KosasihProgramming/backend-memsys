@@ -10,45 +10,28 @@ Proyek ini dilisensikan di bawah lisensi MIT. Lihat file [LICENSE](LICENSE) untu
 
 ## Dokumentasi API
 
+### API Login
+
+```bash
+POST http://localhost:5000/login
+```
+
+#### Request Body
+
+```bash
+{
+  "username": "HG001.Hg",
+  "password": "1234",
+}
+```
+
 ### Mendapatkan Nama Akun
 
 ```bash
 GET http://localhost:5000/accounts
 ```
 
-### Mencari Balance
-
-```bash
-POST http://localhost:5000/cashflow
-```
-
-#### Request Body
-
-```bash
-{
-  "totalKas": 100000,
-  "tanggalAkhir": "YYYY/MM/DD",
-  "accountId": "101.002"
-}
-```
-
-### Mendapatkan Data Balance dan Data Cashflow
-
-```bash
-POST http://localhost:5000/cashflow
-```
-
-#### Request Body
-
-```bash
-{
-  "tanggalAwal": "YYYY/MM/DD",
-  "tanggalAkhir": "YYYY/MM/DD",
-  "accountId": "101.002"
-}
-```
-
-### Mendapatkan Data Arus Kas
+### Mencari Cashflow (Arus kas)
 
 ```bash
 POST http://localhost:5000/arus-kas
@@ -58,8 +41,10 @@ POST http://localhost:5000/arus-kas
 
 ```bash
 {
-  "tanggalAwal": "YYYY-MM-DD",
-  "tanggalAkhir": "YYYY-MM-DD",
+  "tanggalAwal": "YYYY/MM/DD",
+  "tanggalAkhir": "YYYY/MM/DD",
+  "accountId": "101.002",
+  "username": "HG001.Hg"
 }
 ```
 
