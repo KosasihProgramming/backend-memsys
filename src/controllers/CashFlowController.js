@@ -1,4 +1,4 @@
-import { connection } from "../config/Database.js";
+import { connection, connectionAuth } from "../config/Database.js";
 
 export const getCashflow = async (req, res) => {
   const { tanggalAwal, tanggalAkhir, accountId } = req.body;
@@ -69,15 +69,17 @@ export const balanceCek = async (req, res) => {
 };
 
 export const arusKas = async (req, res) => {
-  const { tanggalAwal, tanggalAkhir, accountId } = req.body;
+  const { tanggalAwal, tanggalAkhir, accountId, username } = req.body;
 
-  const queryDelete = `delete from tmpkas where k10='AKK013.Silvi'`;
+  const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
+
+  const queryDelete = `delete from tmpkas where k10='${username}'`;
 
   const querySaldoAwal = `
     INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
     SELECT '01' AS k01, 'Saldo Awal' AS k02, IFNULL(account.name, '') AS k03,
       IFNULL(SUM(journaltrans.debit) - SUM(journaltrans.credit), '0') AS k04,
-      '0' AS k05, '${tanggalAwal} 00:00:00' AS k06, 'AKK013.Silvi' AS k10
+      '0' AS k05, '${tanggalAwal} 00:00:00' AS k06, '${username}' AS k10
     FROM journaltrans
     INNER JOIN account ON (journaltrans.accountid = account.id)
     WHERE journaltrans.accountid = '${accountId}' AND journaltrans.jtdate < '${tanggalAwal} 00:00:00';`;
@@ -86,7 +88,7 @@ export const arusKas = async (req, res) => {
     INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
     SELECT '02' AS k1, 'Perubahan Kas' AS k2, IFNULL(account.name, '') AS k3, 
       IFNULL(journaltrans.credit, '0') AS k4, IFNULL(journaltrans.debit, '0') AS k5, 
-      journaltrans.jtdate AS k6, 'AKK013.Silvi' AS k10 
+      journaltrans.jtdate AS k6, '${username}' AS k10 
     FROM journaltrans
     INNER JOIN account ON (journaltrans.accountid = account.id)
     WHERE journaltrans.accountid <> '${accountId}' 
@@ -101,18 +103,19 @@ export const arusKas = async (req, res) => {
     INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
     SELECT '03' AS k1, 'Saldo Akhir' AS k2, 
       (SELECT IFNULL(account.name, '') FROM account WHERE id = '${accountId}') AS k3, 
-      (SELECT SUM(k04) - SUM(k05) FROM tmpkas WHERE k10 = 'AKK013.Silvi') AS k4, 
-      '0' AS k5, '${tanggalAkhir} 23:59:59' AS k6, 'AKK013.Silvi' AS k10 
+      (SELECT SUM(k04) - SUM(k05) FROM tmpkas WHERE k10 = '${username}') AS k4, 
+      '0' AS k5, '${tanggalAkhir} 23:59:59' AS k6, '${username}' AS k10 
     FROM tmpkas 
     LIMIT 1;`;
 
   const queryTerakhir = `SELECT k01, k02, k03, SUM(k04) - SUM(k05) AS jml, k06 
     FROM tmpkas 
-    WHERE k10 = 'AKK013.Silvi' 
+    WHERE k10 = '${username}' 
     GROUP BY k03, k01 
     ORDER BY k01, k06 ASC;`;
 
   try {
+    const [userLogin] = await connectionAuth.query(queryGetUserLogin);
     await connection.query(queryDelete);
     await connection.query(querySaldoAwal);
     await connection.query(queryPerubahanKas);
@@ -122,6 +125,7 @@ export const arusKas = async (req, res) => {
       status: "Success",
       message: "Rekap Arus Kas",
       namaAkun: response[0].k03,
+      namaUser: userLogin[0].nama,
       tanggal: {
         awal: tanggalAwal,
         akhir: tanggalAkhir,
