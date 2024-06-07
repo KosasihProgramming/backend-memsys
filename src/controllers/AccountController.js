@@ -1,4 +1,4 @@
-import connection from "../config/Database.js";
+import { connection } from "../config/Database.js";
 
 export const acountsIndex = async (req, res) => {
   const stringQuery = `SELECT id, name FROM account WHERE accountgroup IN(101, 102)`;

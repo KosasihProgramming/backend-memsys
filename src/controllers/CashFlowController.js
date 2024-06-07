@@ -1,4 +1,4 @@
-import connection from "../config/Database.js";
+import { connection } from "../config/Database.js";
 
 export const getCashflow = async (req, res) => {
   const { tanggalAwal, tanggalAkhir, accountId } = req.body;
@@ -27,8 +27,8 @@ export const getCashflow = async (req, res) => {
     res.json({
       status: "success",
       message: "Data Cashflwo",
-      dataBalance: responseBalance[0],
-      dataCachFlow: responseCashFlow,
+      data: responseBalance,
+      dataJurnalUmum: responseCashFlow,
     });
   } catch (error) {
     console.error("Error fetching cashflow: ", error);
@@ -69,63 +69,66 @@ export const balanceCek = async (req, res) => {
 };
 
 export const arusKas = async (req, res) => {
-  const { tanggalAwal, tanggalAkhir } = req.body;
+  const { tanggalAwal, tanggalAkhir, accountId } = req.body;
 
-  const querySaldoAwal = `SELECT '01' AS k01, 'Saldo Awal' AS k02,
-    IFNULL(account.name, '') AS k03,
-    IFNULL(SUM(journaltrans.debit) - SUM(journaltrans.credit), '0') AS k04, '0' AS k05, '${tanggalAwal} 00:00:00' AS k06, 'HG001.Hg' AS k10
-    FROM journaltrans
-    INNER JOIN account ON journaltrans.accountid = account.id
-    WHERE journaltrans.accountid = '101.002' AND journaltrans.jtdate < '${tanggalAwal} 00:00:00';`;
+  const queryDelete = `delete from tmpkas where k10='AKK013.Silvi'`;
 
-  const queryPerubahanKas = `SELECT '02' AS k1, 'Perubahan Kas' AS k2,
-    IFNULL(account.name, '') AS k3,
-    IFNULL(journaltrans.credit, '0') AS k4,
-    IFNULL(journaltrans.debit, '0') AS k5, journaltrans.jtdate AS k6, 'HG001.Hg' AS k10
+  const querySaldoAwal = `
+    INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
+    SELECT '01' AS k01, 'Saldo Awal' AS k02, IFNULL(account.name, '') AS k03,
+      IFNULL(SUM(journaltrans.debit) - SUM(journaltrans.credit), '0') AS k04,
+      '0' AS k05, '${tanggalAwal} 00:00:00' AS k06, 'AKK013.Silvi' AS k10
     FROM journaltrans
-    INNER JOIN account ON journaltrans.accountid = account.id
-    WHERE journaltrans.accountid <> '101.002'
-      AND (journaltrans.jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59')
+    INNER JOIN account ON (journaltrans.accountid = account.id)
+    WHERE journaltrans.accountid = '${accountId}' AND journaltrans.jtdate < '${tanggalAwal} 00:00:00';`;
+
+  const queryPerubahanKas = `
+    INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
+    SELECT '02' AS k1, 'Perubahan Kas' AS k2, IFNULL(account.name, '') AS k3, 
+      IFNULL(journaltrans.credit, '0') AS k4, IFNULL(journaltrans.debit, '0') AS k5, 
+      journaltrans.jtdate AS k6, 'AKK013.Silvi' AS k10 
+    FROM journaltrans
+    INNER JOIN account ON (journaltrans.accountid = account.id)
+    WHERE journaltrans.accountid <> '${accountId}' 
+      AND (journaltrans.jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59') 
       AND journaltrans.jtid IN (
-        SELECT jtid FROM journaltrans
-        WHERE accountid = '101.002'
-          AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59');`;
+        SELECT jtid FROM journaltrans 
+        WHERE accountid = '${accountId}' 
+          AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59'
+      );`;
 
-  const querySaldoAkhir = `SELECT '03' AS k1, 'Saldo Akhir' AS k2, (SELECT IFNULL(account.name, '') 
-    FROM account 
-    WHERE id = '101.002') AS k3,
-      (SELECT SUM(k04) - SUM(k05) 
+  const querySaldoAkhir = `
+    INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k10) 
+    SELECT '03' AS k1, 'Saldo Akhir' AS k2, 
+      (SELECT IFNULL(account.name, '') FROM account WHERE id = '${accountId}') AS k3, 
+      (SELECT SUM(k04) - SUM(k05) FROM tmpkas WHERE k10 = 'AKK013.Silvi') AS k4, 
+      '0' AS k5, '${tanggalAkhir} 23:59:59' AS k6, 'AKK013.Silvi' AS k10 
     FROM tmpkas 
-    WHERE k10 = 'HG001.Hg') AS k4,
-      '0' AS k5,
-      '2024-06-05 23:59:59' AS k6,
-      'HG001.Hg' AS k10 
-    FROM tmpkas LIMIT 1;`;
+    LIMIT 1;`;
+
+  const queryTerakhir = `SELECT k01, k02, k03, SUM(k04) - SUM(k05) AS jml, k06 
+    FROM tmpkas 
+    WHERE k10 = 'AKK013.Silvi' 
+    GROUP BY k03, k01 
+    ORDER BY k01, k06 ASC;`;
 
   try {
-    const [responseSaldoAwal] = await connection.query(querySaldoAwal);
-    const [responsePerubahanKas] = await connection.query(queryPerubahanKas);
-    const [responseSaldoAkhir] = await connection.query(querySaldoAkhir);
+    await connection.query(queryDelete);
+    await connection.query(querySaldoAwal);
+    await connection.query(queryPerubahanKas);
+    await connection.query(querySaldoAkhir);
+    const [response] = await connection.query(queryTerakhir);
     res.json({
       status: "Success",
-      message: "Data Perubahan Arus Kas",
-      data: {
-        tanggal: {
-          tanggalAwal: responseSaldoAwal[0].k06,
-          tanggalAkhir: responseSaldoAkhir[0].k6,
-        },
-        saldoAwal: {
-          namaAkun: responseSaldoAwal[0].k03,
-          jumlah: responseSaldoAwal[0].k04,
-        },
-        saldoAkhir: {
-          namaAkun: responseSaldoAkhir[0].k3,
-          jumlah: responseSaldoAkhir[0].k4,
-        },
-        perubahanKas: {
-          dataPerubahanKas: responsePerubahanKas,
-        },
+      message: "Rekap Arus Kas",
+      namaAkun: response[0].k03,
+      tanggal: {
+        awal: tanggalAwal,
+        akhir: tanggalAkhir,
       },
+      data: response,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error("error: ", error.message);
+  }
 };

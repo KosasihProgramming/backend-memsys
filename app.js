@@ -5,6 +5,7 @@ import cors from "cors";
 import HomeRoute from "./src/routes/HomeRoute.js";
 import AcountRoute from "./src/routes/AcountRoute.js";
 import CashFlowRoute from "./src/routes/CashFlowRoute.js";
+import AuthRoute from "./src/routes/AuthRoute.js";
 
 const app = express();
 const port = 5000;
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(HomeRoute);
 app.use(AcountRoute);
 app.use(CashFlowRoute);
+app.use(AuthRoute);
 
 app.listen(port, () => {
   console.log(`Jalan uy di port: ${port}`);
