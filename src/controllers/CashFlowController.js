@@ -68,6 +68,7 @@ export const arusKas = async (req, res) => {
 
     if (dataSetor == undefined) {
       dataSetor = {
+        k03: "Tidak nyetor",
         jml: "Tidak nyetor",
       };
     }
@@ -87,6 +88,7 @@ export const arusKas = async (req, res) => {
       },
       data: response,
       dataSetor: {
+        namaAkunSetor: dataSetor.k03,
         yangDisetor: makePositive(dataSetor.jml),
         sisaModal: sisaModal,
         modalSeharusnya: responseModal[0].nominal,
