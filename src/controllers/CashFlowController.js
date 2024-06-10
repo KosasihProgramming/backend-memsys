@@ -64,11 +64,16 @@ export const arusKas = async (req, res) => {
 
     let dataSetor = await filterData(response, responseAkunSetor[0].nama_akun);
 
+    const saldoAwal = await filterSaldoAwal(response);
+
     if (dataSetor == undefined) {
       dataSetor = {
         jml: "Tidak nyetor",
       };
     }
+
+    let sisaModal = saldoAwal.jml - makePositive(dataSetor.jml);
+    if (isNaN(sisaModal)) sisaModal = "Belum dikurangi";
 
     res.json({
       status: "Success",
@@ -83,10 +88,11 @@ export const arusKas = async (req, res) => {
       data: response,
       dataSetor: {
         yangDisetor: makePositive(dataSetor.jml),
-        sisaModal: 1,
+        sisaModal: sisaModal,
         modalSeharusnya: responseModal[0].nominal,
       },
     });
+    console.log("Berhasil!");
   } catch (error) {
     console.error("error: ", error.message);
   }
@@ -102,4 +108,8 @@ function makePositive(value) {
     return Math.abs(value);
   }
   return value;
+}
+
+function filterSaldoAwal(data) {
+  return data.find((obj) => obj.k02 === "Saldo Awal");
 }

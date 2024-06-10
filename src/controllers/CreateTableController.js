@@ -61,6 +61,7 @@ export const seedingTable = async (req, res) => {
       status: "Success",
       message: "Seeding Success",
     });
+    console.log("Seeding Success");
   } catch (error) {
     console.error("Error seeding: ", error.message);
   }

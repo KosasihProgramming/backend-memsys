@@ -18,6 +18,7 @@ export const login = async (req, res) => {
       message: "Berhasil login",
       user: response[0],
     });
+    console.log("Si User Login");
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ status: "Error", error: error.message });

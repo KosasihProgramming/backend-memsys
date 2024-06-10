@@ -9,6 +9,7 @@ export const acountsIndex = async (req, res) => {
       message: "List Nama Akun",
       data: response,
     });
+    console.log("Berhasil");
   } catch (error) {
     console.log("error: ", error.message);
   }
