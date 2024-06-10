@@ -5,17 +5,21 @@ export const createTable = async (req, res) => {
     CREATE TABLE IF NOT EXISTS clinicmodal (
       id INT AUTO_INCREMENT PRIMARY KEY,
       nominal DOUBLE NOT NULL
-    )
+    );
   `;
 
   const createTableRiwayatCheck = `
     CREATE TABLE IF NOT EXISTS riwayat_check (
       id INT AUTO_INCREMENT PRIMARY KEY,
       user VARCHAR(255) NOT NULL,
-      tanggal DATE NOT NULL,
-      nominal_request DOUBLE NOT NULL,
-      nominal_respon DOUBLE NOT NULL
-    )
+      tanggal_cek DATE NOT NULL,
+      tanggal_jurnal_awal DATE NOT NULL,
+      tanggal_jurnal_akhir DATE NOT NULL,
+      nama_akun VARCHAR(255) NOT NULL,
+      nominal_kas_manual DOUBLE NOT NULL,
+      nominal_kas_sistem DOUBLE NOT NULL,
+      selisih DOUBLE NOT NULL
+    );
   `;
 
   const createTableAkunSetor = `
@@ -23,13 +27,13 @@ export const createTable = async (req, res) => {
       id INT AUTO_INCREMENT PRIMARY KEY,
       id_akun CHAR NOT NULL,
       nama_akun VARCHAR(255) NOT NULL
-    )
+    );
   `;
 
   try {
-    await connection.query(createTableModal);
+    // await connection.query(createTableModal);
     await connection.query(createTableRiwayatCheck);
-    await connection.query(createTableAkunSetor);
+    // await connection.query(createTableAkunSetor);
     res.json({
       status: "Success",
       message:

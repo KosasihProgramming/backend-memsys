@@ -100,6 +100,28 @@ export const arusKas = async (req, res) => {
   }
 };
 
+export const insertHistory = async (req, res) => {
+  const {
+    user,
+    tanggalJurnalAwal,
+    tanggalJurnalAkhir,
+    namaAkun,
+    nominalKasManual,
+    nominalKasSistem,
+    selisih,
+  } = req.body;
+
+  const queryInsert = `INSERT INTO riwayat_check (user, tanggal_cek, tanggal_jurnal_awal, tanggal_jurnal_akhir, nama_akun, nominal_kas_manual, nominal_kas_sistem, selisih) VALUES ('${user}', CURDATE(), '${tanggalJurnalAwal}', '${tanggalJurnalAkhir}', '${namaAkun}', ${nominalKasManual}, ${nominalKasSistem}, ${selisih});`;
+
+  const [response] = await connection.query(queryInsert);
+  res.json({
+    status: "Success",
+    message: "Berhasil insert data riwayat",
+  });
+
+  console.log(response);
+};
+
 // function
 function filterData(data, value) {
   return data.find((obj) => obj.k03 === value);
