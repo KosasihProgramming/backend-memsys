@@ -1,4 +1,4 @@
-import mysql from "mysql2";
+const mysql = require("mysql2");
 
 const dbConfig = {
   host: "localhost",
@@ -21,4 +21,4 @@ const connection = pool.promise();
 const poolAuth = mysql.createPool(dbAuth);
 const connectionAuth = poolAuth.promise();
 
-export { connection, connectionAuth };
+module.exports = { connection, connectionAuth };

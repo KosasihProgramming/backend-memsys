@@ -1,12 +1,12 @@
 // Import library
-import express from "express";
-import cors from "cors";
+const express = require("express");
+const cors = require("cors");
 // Import Route
-import HomeRoute from "./src/routes/HomeRoute.js";
-import AcountRoute from "./src/routes/AcountRoute.js";
-import CashFlowRoute from "./src/routes/CashFlowRoute.js";
-import AuthRoute from "./src/routes/AuthRoute.js";
-import CreateTableRoute from "./src/routes/CreateTableRoute.js";
+const HomeRoute = require("./src/routes/HomeRoute.js");
+const AcountRoute = require("./src/routes/AcountRoute.js");
+const CashFlowRoute = require("./src/routes/CashFlowRoute.js");
+const AuthRoute = require("./src/routes/AuthRoute.js");
+const CreateTableRoute = require("./src/routes/CreateTableRoute.js");
 
 const app = express();
 const port = 5000;

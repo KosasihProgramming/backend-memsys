@@ -1,6 +1,6 @@
-import { connection } from "../config/Database.js";
+const { connection } = require("../config/Database.js");
 
-export const acountsIndex = async (req, res) => {
+const acountsIndex = async (req, res) => {
   const stringQuery = `SELECT id, name FROM account WHERE accountgroup IN(101, 102)`;
   try {
     const [response, fild] = await connection.query(stringQuery);
@@ -14,3 +14,5 @@ export const acountsIndex = async (req, res) => {
     console.log("error: ", error.message);
   }
 };
+
+module.exports = { acountsIndex };

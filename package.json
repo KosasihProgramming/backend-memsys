@@ -2,7 +2,6 @@
   "name": "backend-memsys",
   "version": "1.0.0",
   "description": "Buat back end memsys",
-  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js"

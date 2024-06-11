@@ -1,6 +1,6 @@
-import { connectionAuth } from "../config/Database.js";
+const { connectionAuth } = require("../config/Database.js");
 
-export const login = async (req, res) => {
+const login = async (req, res) => {
   const { username, password } = req.body;
 
   try {
@@ -24,3 +24,5 @@ export const login = async (req, res) => {
     res.status(500).json({ status: "Error", error: error.message });
   }
 };
+
+module.exports = { login };

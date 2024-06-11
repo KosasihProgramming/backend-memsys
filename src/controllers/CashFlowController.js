@@ -1,6 +1,6 @@
-import { connection, connectionAuth } from "../config/Database.js";
+const { connection, connectionAuth } = require("../config/Database.js");
 
-export const arusKas = async (req, res) => {
+const arusKas = async (req, res) => {
   const { tanggalAwal, tanggalAkhir, accountId, username } = req.body;
 
   const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
@@ -28,7 +28,7 @@ export const arusKas = async (req, res) => {
       AND journaltrans.jtid IN (
         SELECT jtid FROM journaltrans 
         WHERE accountid = '${accountId}' 
-          AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59'
+          AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59}'
       );`;
 
   const querySaldoAkhir = `
@@ -100,7 +100,7 @@ export const arusKas = async (req, res) => {
   }
 };
 
-export const insertHistory = async (req, res) => {
+const insertHistory = async (req, res) => {
   const {
     user,
     tanggalJurnalAwal,
@@ -137,3 +137,5 @@ function makePositive(value) {
 function filterSaldoAwal(data) {
   return data.find((obj) => obj.k02 === "Saldo Awal");
 }
+
+module.exports = { arusKas, insertHistory };

@@ -1,12 +1,12 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createTable,
   seedingTable,
-} from "../controllers/CreateTableController.js";
+} = require("../controllers/CreateTableController.js");
 
 const router = express.Router();
 
 router.get("/table-migration", createTable);
 router.get("/table-seeding", seedingTable);
 
-export default router;
+module.exports = router;

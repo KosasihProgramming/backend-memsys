@@ -1,4 +1,4 @@
-export const getIndex = (req, res) => {
+const getIndex = (req, res) => {
   try {
     const response = {
       nama: "API Memsys",
@@ -18,3 +18,5 @@ export const getIndex = (req, res) => {
     });
   }
 };
+
+module.exports = { getIndex };

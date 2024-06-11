@@ -1,6 +1,6 @@
-import { connection } from "../config/Database.js";
+const { connection } = require("../config/Database.js");
 
-export const createTable = async (req, res) => {
+const createTable = async (req, res) => {
   const createTableModal = `
     CREATE TABLE IF NOT EXISTS clinicmodal (
       id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,7 +47,7 @@ export const createTable = async (req, res) => {
   }
 };
 
-export const seedingTable = async (req, res) => {
+const seedingTable = async (req, res) => {
   const insertModal = `
     INSERT INTO clinicmodal (id, nominal)
     VALUES (1, 1000000);  
@@ -70,3 +70,5 @@ export const seedingTable = async (req, res) => {
     console.error("Error seeding: ", error.message);
   }
 };
+
+module.exports = { createTable, seedingTable };

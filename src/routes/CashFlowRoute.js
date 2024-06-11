@@ -1,9 +1,12 @@
-import express from "express";
-import { arusKas, insertHistory } from "../controllers/CashFlowController.js";
+const express = require("express");
+const {
+  arusKas,
+  insertHistory,
+} = require("../controllers/CashFlowController.js");
 
 const router = express.Router();
 
 router.post("/arus-kas", arusKas);
 router.post("/insert-history", insertHistory);
 
-export default router;
+module.exports = router;
