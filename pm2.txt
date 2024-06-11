@@ -1,1 +1,4 @@
 pm2 start D:\Kosasih Pusat\Memsys\backend-memsys\app.js --name server-memsys
+
+/src/config/Database.js
+/src/config/CatatanDatabase.txt

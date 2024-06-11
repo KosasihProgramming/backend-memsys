@@ -25,15 +25,15 @@ export const createTable = async (req, res) => {
   const createTableAkunSetor = `
     CREATE TABLE IF NOT EXISTS akun_setor (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      id_akun CHAR NOT NULL,
+      id_akun CHAR(11) NOT NULL,
       nama_akun VARCHAR(255) NOT NULL
     );
   `;
 
   try {
-    // await connection.query(createTableModal);
+    await connection.query(createTableModal);
     await connection.query(createTableRiwayatCheck);
-    // await connection.query(createTableAkunSetor);
+    await connection.query(createTableAkunSetor);
     res.json({
       status: "Success",
       message:

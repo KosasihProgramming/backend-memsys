@@ -1,4 +1,3 @@
 /node_modules
-/src/config/Database.js
-/src/config/CatatanDatabase.txt
+
 request.rest

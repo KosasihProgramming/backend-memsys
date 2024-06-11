@@ -1,0 +1,29 @@
+Modal
+-> id
+-> nominal
+
+riwayat_check
+-> id
+-> user
+-> tanggal
+-> nominal_request
+-> nominal_respon
+
+akun_setor
+-> id
+-> id_akun
+-> nama_akun
+
+###
+Akun ID per klinik
+1. Klinik amanah, = 102.001
+2. GTS Kemiling = 102.002
+2. GTS Tirtayasa = 102.005
+3. Klinik Kemiling = 102.005
+4. Klinik Palapa = 102.003
+5. Panjang = 102.002
+6. Rajabasa = 102.003
+7. Teluk = 102.002
+8. Tirtayasa = 102.003
+9. Tugu = 102.003
+10. Urip = 102.003
