@@ -2,7 +2,6 @@ import mysql from "mysql2";
 
 const dbConfig = {
   host: "localhost",
-  // port: "6033",
   user: "root",
   password: "",
   database: "acosys_test",
