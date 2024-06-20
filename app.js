@@ -8,6 +8,7 @@ import CashFlowRoute from "./src/routes/CashFlowRoute.js";
 import AuthRoute from "./src/routes/AuthRoute.js";
 import CreateTableRoute from "./src/routes/CreateTableRoute.js";
 import JournalRoute from "./src/routes/JournalRoute.js";
+import HistoryCheckRoute from "./src/routes/HistoryCheckRoute.js";
 
 const app = express();
 const port = 5000;
@@ -21,6 +22,7 @@ app.use(CashFlowRoute);
 app.use(AuthRoute);
 app.use(CreateTableRoute);
 app.use(JournalRoute);
+app.use(HistoryCheckRoute);
 
 app.listen(port, () => {
   console.log(`Jalan uy di port: ${port}`);

@@ -23,8 +23,9 @@ export const createTable = async (req, res) => {
   `;
 
   const createTableRiwayat = `
-    CREATE TABLE IF NOT EXISTS riwayat (
+    CREATE TABLE IF NOT EXISTS riwayat_check_detail (
       id INT AUTO_INCREMENT PRIMARY KEY,
+      id_riwayat_check INT,
       jenis_kas VARCHAR(255) NOT NULL,
       nama_kas VARCHAR(255) NOT NULL,
       nominal DOUBLE NOT NULL
