@@ -7,43 +7,44 @@ export const uangKurang = async (req, res) => {
 
   const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
 
-  const queryReftransaction = `SELECT t1.reftransaction
-    FROM journaltrans AS t1
-    LEFT JOIN division AS t2 ON t2.id = t1.division
-    WHERE t1.approved = 1
-      AND DATE(t1.jtdate) = CURDATE()
-      AND t1.accountid = '101.002'
-      AND t1.division IN ('0011')
-    ORDER BY t1.jtdate, t1.jtid, t1.debit DESC, t1.credit;`;
+  const queryReftransaction = `SELECT journalentryidno FROM division`;
 
   const [akunJurnal] = await connection.query(querySelectAcount);
   const idAkunPiutang = akunJurnal[0].id_akun;
-  const reftransaction = await connection.query(queryReftransaction);
+
+  const journalentryidno = await connection.query(queryReftransaction);
+  const reftransaction = journalentryidno[0];
   const user = await connectionAuth.query(queryGetUserLogin);
 
   const nama = user[0];
-  const ref = getNextRefTransactions(reftransaction[0]);
+  const ref = getNextRefTransactions(reftransaction[0].journalentryidno);
   const today = await getDate();
   const now = await getTime();
 
+  const queryUpdateJournalEntry = `UPDATE division
+    SET journalentryidno = ${reftransaction[0].journalentryidno + 1} 
+    WHERE journalentryidno = ${reftransaction[0].journalentryidno};
+  `;
+
   const queryInsertJurnal = `INSERT INTO journal (jtid, jtdate, jttime, memo, memoedit, division, printed, approved, usercreate, useredit)
-  VALUES ('${ref[0]}', '${today}', '${now}', 'Uang Kurang (${nama[0].nama})', '', '0011', 0, 1, '${username}', '');`;
+  VALUES ('${ref}', '${today}', '${now}', 'Uang Kurang (${nama[0].nama})', '', '0011', 0, 1, '${username}', '');`;
 
   const queryInsertJurnalTransPiutang = `INSERT INTO journaltrans
   (id, jtid, jtdate, memo, division, reftransaction, accountid, approved, debit, credit, usercreate, useredit)
   VALUES
-  (NULL, '${ref[0]}', '${today} ${now}', 'Uang Kurang (${nama[0].nama})', '0011', '${ref[0]}', '${idAkunPiutang}', 1, ${selisih}, 0, '${username}', '${username}');`;
+  (NULL, '${ref}', '${today} ${now}', 'Uang Kurang (${nama[0].nama})', '0011', '${ref}', '${idAkunPiutang}', 1, ${selisih}, 0, '${username}', '${username}');`;
 
   const queryInsertJurnalTransKas = `INSERT INTO journaltrans
   (id, jtid, jtdate, memo, division, reftransaction, accountid, approved, debit, credit, usercreate, useredit)
   VALUES
-  (NULL, '${ref[0]}', '${today} ${now}', 'Uang Kurang (${nama[0].nama})', '0011', '${ref[0]}', '${idAkun}', 1, 0, ${selisih}, '${username}', '${username}');`;
+  (NULL, '${ref}', '${today} ${now}', 'Uang Kurang (${nama[0].nama})', '0011', '${ref}', '${idAkun}', 1, 0, ${selisih}, '${username}', '${username}');`;
 
   try {
+    await connection.query(queryUpdateJournalEntry);
     await connection.query(queryInsertJurnal);
     await connection.query(queryInsertJurnalTransPiutang);
     await connection.query(queryInsertJurnalTransKas);
-    console.log("Berhasil insert kas kurang dengan ref: ", ref[0]);
+    console.log("Berhasil insert kas kurang dengan ref: ", ref);
     res.json({
       status: "Success",
       message: "Berhasil insert jurnal kas kurang",
@@ -60,43 +61,44 @@ export const uangLebih = async (req, res) => {
 
   const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
 
-  const queryReftransaction = `SELECT t1.reftransaction
-    FROM journaltrans AS t1
-    LEFT JOIN division AS t2 ON t2.id = t1.division
-    WHERE t1.approved = 1
-      AND DATE(t1.jtdate) = CURDATE()
-      AND t1.accountid = '101.002'
-      AND t1.division IN ('0011')
-    ORDER BY t1.jtdate, t1.jtid, t1.debit DESC, t1.credit;`;
+  const queryReftransaction = `SELECT journalentryidno FROM division`;
 
   const [akunJurnal] = await connection.query(querySelectAcount);
   const idAkunPendapatan = akunJurnal[0].id_akun;
-  const reftransaction = await connection.query(queryReftransaction);
+
+  const journalentryidno = await connection.query(queryReftransaction);
+  const reftransaction = journalentryidno[0];
   const user = await connectionAuth.query(queryGetUserLogin);
 
   const nama = user[0];
-  const ref = getNextRefTransactions(reftransaction[0]);
+  const ref = getNextRefTransactions(reftransaction[0].journalentryidno);
   const today = await getDate();
   const now = await getTime();
 
+  const queryUpdateJournalEntry = `UPDATE division
+    SET journalentryidno = ${reftransaction[0].journalentryidno + 1} 
+    WHERE journalentryidno = ${reftransaction[0].journalentryidno};
+  `;
+
   const queryInsertJurnal = `INSERT INTO journal (jtid, jtdate, jttime, memo, memoedit, division, printed, approved, usercreate, useredit)
-  VALUES ('${ref[0]}', '${today}', '${now}', 'Uang Plus (${nama[0].nama})', '', '0011', 0, 1, '${username}', '');`;
+  VALUES ('${ref}', '${today}', '${now}', 'Uang Plus (${nama[0].nama})', '', '0011', 0, 1, '${username}', '');`;
 
   const queryInsertJurnalTransDebit = `INSERT INTO journaltrans
   (id, jtid, jtdate, memo, division, reftransaction, accountid, approved, debit, credit, usercreate, useredit)
   VALUES
-  (NULL, '${ref[0]}', '${today} ${now}', 'Uang Plus (${nama[0].nama})', '0011', '${ref[0]}', '${idAkun}', 1, ${selisih}, 0, '${username}', '${username}');`;
+  (NULL, '${ref}', '${today} ${now}', 'Uang Plus (${nama[0].nama})', '0011', '${ref}', '${idAkun}', 1, ${selisih}, 0, '${username}', '${username}');`;
 
   const queryInsertJurnalTransKredit = `INSERT INTO journaltrans
   (id, jtid, jtdate, memo, division, reftransaction, accountid, approved, debit, credit, usercreate, useredit)
   VALUES
-  (NULL, '${ref[0]}', '${today} ${now}', 'Uang Plus (${nama[0].nama})', '0011', '${ref[0]}', '${idAkunPendapatan}', 1, 0, ${selisih}, '${username}', '${username}');`;
+  (NULL, '${ref}', '${today} ${now}', 'Uang Plus (${nama[0].nama})', '0011', '${ref}', '${idAkunPendapatan}', 1, 0, ${selisih}, '${username}', '${username}');`;
 
   try {
+    await connection.query(queryUpdateJournalEntry);
     await connection.query(queryInsertJurnal);
     await connection.query(queryInsertJurnalTransDebit);
     await connection.query(queryInsertJurnalTransKredit);
-    console.log("Berhasil insert kas Lebih");
+    console.log("Berhasil insert kas Lebih dengan ref: ", ref);
     res.json({
       status: "Success",
       message: "Berhasil insert jurnal kas Lebih",
@@ -125,17 +127,12 @@ function getTime() {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-function getNextRefTransactions(transactions) {
-  const numbers = transactions.map((item) =>
-    parseInt(item.reftransaction.split("-")[1])
-  );
+function getNextRefTransactions(number) {
+  // Menambahkan 1 ke nilai number
+  const incrementedNumber = number + 1;
 
-  const maxNumber = Math.max(...numbers);
+  // Membuat format string dengan 6 digit angka dan diawali dengan "I/JT-"
+  const formattedJtid = `I/JT-${String(incrementedNumber).padStart(6, "0")}`;
 
-  const nextRefTransactions = [
-    `I/JT-${(maxNumber + 1).toString().padStart(6, "0")}`,
-    `I/JT-${(maxNumber + 2).toString().padStart(6, "0")}`,
-  ];
-
-  return nextRefTransactions;
+  return formattedJtid;
 }

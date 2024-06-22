@@ -81,13 +81,13 @@ export const getAllHistoryByUser = async (req, res) => {
 
   const querySelect = `SELECT * FROM riwayat_check WHERE user='${user}'`;
 
-  try {
-    const [response] = await connection.query(querySelect);
+  const [responseHistory] = await connection.query(querySelect);
 
+  try {
     res.status(200).json({
       status: "Berhasil",
       message: "Data Riwayat",
-      data: response,
+      data: responseHistory,
     });
     console.log(querySelect);
   } catch (error) {
@@ -109,6 +109,6 @@ export const getDetailHistory = async (req, res) => {
   res.json({
     status: "Success",
     message: "Data detail history",
-    data: response[0],
+    data: response,
   });
 };
