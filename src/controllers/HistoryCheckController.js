@@ -13,13 +13,17 @@ export const insertHistory = async (req, res) => {
 
   const queryInsert = `INSERT INTO riwayat_check (user, tanggal_cek, tanggal_jurnal_awal, tanggal_jurnal_akhir, nama_akun, nominal_kas_manual, nominal_kas_sistem, selisih) VALUES ('${user}', CURDATE(), '${tanggalJurnalAwal}', '${tanggalJurnalAkhir}', '${namaAkun}', ${nominalKasManual}, ${nominalKasSistem}, ${selisih});`;
 
-  const [response] = await connection.query(queryInsert);
-  res.json({
-    status: "Success",
-    message: "Berhasil insert data riwayat",
-  });
+  try {
+    const [response] = await connection.query(queryInsert);
+    res.json({
+      status: "Success",
+      message: "Berhasil insert data riwayat",
+    });
 
-  console.log(response);
+    console.log(response);
+  } catch (error) {
+    console.error("Tidak insert karena: ", error.message);
+  }
 };
 
 export const insertDetailHistory = async (req, res) => {
@@ -27,13 +31,17 @@ export const insertDetailHistory = async (req, res) => {
 
   const queryInsert = `INSERT INTO riwayat_check_detail (id_riwayat_check, jenis_kas, nama_kas, nominal) VALUES (${idRiwayat}, '${jenisKas}', '${namaKas}', ${nominal})`;
 
-  const [response] = await connection.query(queryInsert);
-  res.json({
-    status: "Success",
-    message: "Berhasil insert data detail riwayat",
-  });
+  try {
+    const [response] = await connection.query(queryInsert);
+    res.json({
+      status: "Success",
+      message: "Berhasil insert data detail riwayat",
+    });
 
-  console.log(response);
+    console.log(response);
+  } catch (error) {
+    console.error("Tidak insert karena: ", error.message);
+  }
 };
 
 export const getHistory = async (req, res) => {
@@ -57,6 +65,30 @@ export const getHistory = async (req, res) => {
       message: "Data Riwayat",
       data: response,
     });
+    console.log(querySelect);
+  } catch (error) {
+    res.status(500).json({
+      status: "Gagal",
+      message: "Terjadi kesalahan dalam mengambil data riwayat",
+      error: error.message,
+    });
+  }
+};
+
+export const getAllHistoryByUser = async (req, res) => {
+  const { user } = req.body;
+
+  const querySelect = `SELECT * FROM riwayat_check WHERE user='${user}'`;
+
+  try {
+    const [response] = await connection.query(querySelect);
+
+    res.status(200).json({
+      status: "Berhasil",
+      message: "Data Riwayat",
+      data: response,
+    });
+    console.log(querySelect);
   } catch (error) {
     res.status(500).json({
       status: "Gagal",

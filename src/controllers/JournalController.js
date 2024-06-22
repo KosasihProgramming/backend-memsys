@@ -15,11 +15,12 @@ export const uangKurang = async (req, res) => {
     ORDER BY t1.jtdate, t1.jtid, t1.debit DESC, t1.credit;`;
 
   const reftransaction = await connection.query(queryReftransaction);
+  // console.log("ref: ", reftransaction[0]);
   const user = await connectionAuth.query(queryGetUserLogin);
 
   const nama = user[0];
   const ref = getNextRefTransactions(reftransaction[0]);
-  console.log(ref);
+  console.log("ref: ", ref[0]);
   const today = await getDate();
   const now = await getTime();
 
@@ -40,7 +41,7 @@ export const uangKurang = async (req, res) => {
     await connection.query(queryInsertJurnal);
     await connection.query(queryInsertJurnalTransPiutang);
     await connection.query(queryInsertJurnalTransKas);
-    console.log("Berhasil insert kas kurang");
+    console.log("Berhasil insert kas kurang dengan ref: ", ref);
     res.json({
       status: "Success",
       message: "Berhasil insert jurnal kas kurang",

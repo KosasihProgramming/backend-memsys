@@ -9,9 +9,10 @@ export const createTable = async (req, res) => {
   `;
 
   const createTableRiwayatCheck = `
-    CREATE TABLE IF NOT EXISTS riwayat_check (
+    CREATE OR REPLACE TABLE riwayat_check (
       id INT AUTO_INCREMENT PRIMARY KEY,
       user VARCHAR(255) NOT NULL,
+      name VARCHAR(255) NOT NULL,
       tanggal_cek DATE NOT NULL,
       tanggal_jurnal_awal DATE NOT NULL,
       tanggal_jurnal_akhir DATE NOT NULL,
@@ -19,7 +20,7 @@ export const createTable = async (req, res) => {
       nominal_kas_manual DOUBLE NOT NULL,
       nominal_kas_sistem DOUBLE NOT NULL,
       selisih DOUBLE NOT NULL
-    );
+    );  
   `;
 
   const createTableRiwayat = `
