@@ -1,5 +1,13 @@
 import mysql from "mysql2";
 
+// const dbConfig = {
+//   host: "26.142.134.35",
+//   port: "6033",
+//   user: "aris",
+//   password: "aksa0502",
+//   database: "db_accrajabasa",
+// };
+
 const dbConfig = {
   host: "localhost",
   user: "root",

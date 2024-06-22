@@ -3,6 +3,7 @@ import { connection } from "../config/Database.js";
 export const insertHistory = async (req, res) => {
   const {
     user,
+    name,
     tanggalJurnalAwal,
     tanggalJurnalAkhir,
     namaAkun,
@@ -11,7 +12,7 @@ export const insertHistory = async (req, res) => {
     selisih,
   } = req.body;
 
-  const queryInsert = `INSERT INTO riwayat_check (user, tanggal_cek, tanggal_jurnal_awal, tanggal_jurnal_akhir, nama_akun, nominal_kas_manual, nominal_kas_sistem, selisih) VALUES ('${user}', CURDATE(), '${tanggalJurnalAwal}', '${tanggalJurnalAkhir}', '${namaAkun}', ${nominalKasManual}, ${nominalKasSistem}, ${selisih});`;
+  const queryInsert = `INSERT INTO riwayat_check (user, name, tanggal_cek, tanggal_jurnal_awal, tanggal_jurnal_akhir, nama_akun, nominal_kas_manual, nominal_kas_sistem, selisih) VALUES ('${user}', '${name}', CURDATE(), '${tanggalJurnalAwal}', '${tanggalJurnalAkhir}', '${namaAkun}', ${nominalKasManual}, ${nominalKasSistem}, ${selisih});`;
 
   try {
     const [response] = await connection.query(queryInsert);
@@ -20,7 +21,7 @@ export const insertHistory = async (req, res) => {
       message: "Berhasil insert data riwayat",
     });
 
-    console.log(response);
+    console.log("Insert History");
   } catch (error) {
     console.error("Tidak insert karena: ", error.message);
   }
@@ -38,7 +39,7 @@ export const insertDetailHistory = async (req, res) => {
       message: "Berhasil insert data detail riwayat",
     });
 
-    console.log(response);
+    console.log("Insert Detail History");
   } catch (error) {
     console.error("Tidak insert karena: ", error.message);
   }

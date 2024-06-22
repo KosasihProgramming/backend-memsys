@@ -41,11 +41,21 @@ export const createTable = async (req, res) => {
     );
   `;
 
+  const createTableAkunJurnal = `
+    CREATE TABLE IF NOT EXISTS akun_jurnal (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      id_akun CHAR(11) NOT NULL,
+      nama_akun VARCHAR(255) NOT NULL,
+      keterangan VARCHAR(255) NOT NULL
+    );
+  `;
+
   try {
     await connection.query(createTableModal);
     await connection.query(createTableRiwayatCheck);
     await connection.query(createTableRiwayat);
     await connection.query(createTableAkunSetor);
+    await connection.query(createTableAkunJurnal);
     res.json({
       status: "Success",
       message:
@@ -70,9 +80,18 @@ export const seedingTable = async (req, res) => {
     VALUES (1, 102.003, 'Bank 3');
   `;
 
+  const insertAkunJurnal = `
+    INSERT INTO akun_jurnal (id, id_akun, nama_akun, keterangan)
+    VALUES (1, 104.045, 'Piutang Karyawan', 'Uang Kurang'),
+          (2, 701.099, 'Pendapatan lain-lain', 'Uang Lebih');
+  `;
+
+  console.log(insertAkunJurnal);
+
   try {
-    await connection.query(insertModal);
-    await connection.query(insertAkunSetor);
+    // await connection.query(insertModal);
+    // await connection.query(insertAkunSetor);
+    await connection.query(insertAkunJurnal);
     res.json({
       status: "Success",
       message: "Seeding Success",
