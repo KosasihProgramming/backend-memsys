@@ -50,12 +50,21 @@ export const createTable = async (req, res) => {
     );
   `;
 
+  const createTableAkunQris = `
+    CREATE TABLE IF NOT EXISTS akun_qris (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      id_akun CHAR(11) NOT NULL,
+      nama_akun VARCHAR(255) NOT NULL
+    );
+  `;
+
   try {
     await connection.query(createTableModal);
     await connection.query(createTableRiwayatCheck);
     await connection.query(createTableRiwayat);
     await connection.query(createTableAkunSetor);
     await connection.query(createTableAkunJurnal);
+    await connection.query(createTableAkunQris);
     res.json({
       status: "Success",
       message:
@@ -86,12 +95,18 @@ export const seedingTable = async (req, res) => {
           (2, 701.099, 'Pendapatan lain-lain', 'Uang Lebih');
   `;
 
+  const insertAkunQris = `
+    INSERT INTO akun_qris (id, id_akun, nama_akun)
+    VALUES (1, 102.002, 'E-Wallet QRIS (12345678)');
+  `;
+
   console.log(insertAkunJurnal);
 
   try {
     // await connection.query(insertModal);
     // await connection.query(insertAkunSetor);
-    await connection.query(insertAkunJurnal);
+    // await connection.query(insertAkunJurnal);
+    await connection.query(insertAkunQris);
     res.json({
       status: "Success",
       message: "Seeding Success",

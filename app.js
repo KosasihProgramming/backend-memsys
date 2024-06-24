@@ -9,6 +9,7 @@ import AuthRoute from "./src/routes/AuthRoute.js";
 import CreateTableRoute from "./src/routes/CreateTableRoute.js";
 import JournalRoute from "./src/routes/JournalRoute.js";
 import HistoryCheckRoute from "./src/routes/HistoryCheckRoute.js";
+import QrisCheck from "./src/routes/QrisCheckRoute.js";
 
 const app = express();
 const port = 5000;
@@ -23,6 +24,7 @@ app.use(AuthRoute);
 app.use(CreateTableRoute);
 app.use(JournalRoute);
 app.use(HistoryCheckRoute);
+app.use(QrisCheck);
 
 app.listen(port, () => {
   console.log(`Jalan uy di port: ${port}`);
