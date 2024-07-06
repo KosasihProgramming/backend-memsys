@@ -53,11 +53,13 @@ export const getHistory = async (req, res) => {
   if (id == undefined) {
     where = `user='${user}' AND selisih=${selisih} AND tanggal_cek='${tanggalCek}';`;
   } else {
-    where = `id='${id}'`;
+    where = `riwayat_check.id='${id}';`;
   }
 
-  const querySelect = `SELECT * FROM riwayat_check WHERE ${where}`;
-
+  const querySelect = `SELECT riwayat_check.*, account.name AS akun
+    FROM riwayat_check
+    JOIN account ON riwayat_check.nama_akun = account.id 
+    WHERE ${where}`;
   try {
     const [response] = await connection.query(querySelect);
 
@@ -79,7 +81,7 @@ export const getHistory = async (req, res) => {
 export const getAllHistoryByUser = async (req, res) => {
   const { user } = req.body;
 
-  const querySelect = `SELECT * FROM riwayat_check WHERE user='${user}'`;
+  const querySelect = `SELECT * FROM riwayat_check`;
 
   const [responseHistory] = await connection.query(querySelect);
 
@@ -89,7 +91,7 @@ export const getAllHistoryByUser = async (req, res) => {
       message: "Data Riwayat",
       data: responseHistory,
     });
-    console.log(querySelect);
+    console.log(responseHistory);
   } catch (error) {
     res.status(500).json({
       status: "Gagal",

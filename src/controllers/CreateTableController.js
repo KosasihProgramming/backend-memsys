@@ -58,13 +58,32 @@ export const createTable = async (req, res) => {
     );
   `;
 
+  const createTableAkunPendapatan = `
+    CREATE TABLE IF NOT EXISTS akun_pendapatan (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      id_akun CHAR(11) NOT NULL,
+      nama_akun VARCHAR(255) NOT NULL,
+      keterangan VARCHAR(255) NOT NULL
+    );
+  `;
+
+  // const createTable = `
+  //   CREATE TABLE IF NOT EXISTS akun_pendapatan (
+  //     id INT AUTO_INCREMENT PRIMARY KEY,
+  //     id_akun CHAR(11) NOT NULL,
+  //     nama_akun VARCHAR(255) NOT NULL,
+  //     keterangan VARCHAR(255) NOT NULL
+  //   );
+  // `;
+
   try {
-    await connection.query(createTableModal);
-    await connection.query(createTableRiwayatCheck);
-    await connection.query(createTableRiwayat);
-    await connection.query(createTableAkunSetor);
-    await connection.query(createTableAkunJurnal);
-    await connection.query(createTableAkunQris);
+    // await connection.query(createTableModal);
+    // await connection.query(createTableRiwayatCheck);
+    // await connection.query(createTableRiwayat);
+    // await connection.query(createTableAkunSetor);
+    // await connection.query(createTableAkunJurnal);
+    // await connection.query(createTableAkunQris);
+    // await connection.query(createTableAkunPendapatan);
     res.json({
       status: "Success",
       message:
@@ -100,13 +119,22 @@ export const seedingTable = async (req, res) => {
     VALUES (1, 102.002, 'E-Wallet QRIS (12345678)');
   `;
 
-  console.log(insertAkunJurnal);
+  const insertAkunPendapatan = `
+    INSERT INTO akun_pendapatan (id, id_akun, nama_akun, keterangan)
+    VALUES (1, '401.007', 'Pendapatan barang klinik', 'barang klinik'),
+          (2, '401.008', 'Pendapatan jasa klinik', 'jasa klinik'),
+          (3, '401.009', 'Pendapatan barang lab', 'barang lab'),
+          (4, '401.010', 'Pendapatan jasa lab', 'jasa lab'),
+          (5, '401.011', 'Pendapatan barang gigi', 'barang gigi'),
+          (6, '401.012', 'Pendapatan jasa gigi', 'jasa gigi');
+  `;
 
   try {
     // await connection.query(insertModal);
     // await connection.query(insertAkunSetor);
     // await connection.query(insertAkunJurnal);
-    await connection.query(insertAkunQris);
+    // await connection.query(insertAkunQris);
+    // await connection.query(insertAkunPendapatan);
     res.json({
       status: "Success",
       message: "Seeding Success",
