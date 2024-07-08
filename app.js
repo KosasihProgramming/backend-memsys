@@ -32,7 +32,7 @@ app.use(QrisCheck);
 app.use(PendapatanRoute);
 
 // Pendapatan Route setiap jam 8 pagi
-cron.schedule("0 8 * * *", async () => {
+cron.schedule("0 7 * * *", async () => {
   try {
     const response = await fetch(`http://localhost:${port}/pendapatan/klinik`);
     const data = await response.text();
@@ -42,7 +42,7 @@ cron.schedule("0 8 * * *", async () => {
   }
 });
 
-cron.schedule("0 8 * * *", async () => {
+cron.schedule("0 7 * * *", async () => {
   try {
     const response = await fetch(`http://localhost:${port}/pendapatan/lab`);
     const data = await response.text();
@@ -52,7 +52,7 @@ cron.schedule("0 8 * * *", async () => {
   }
 });
 
-cron.schedule("0 8 * * *", async () => {
+cron.schedule("0 7 * * *", async () => {
   try {
     const response = await fetch(`http://localhost:${port}/pendapatan/gigi`);
     const data = await response.text();
