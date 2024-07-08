@@ -10,6 +10,7 @@ export const qrisCheck = async (req, res) => {
   // const tanggalHariIni = `${year}-${month}-${day}`;
 
   const accountId = "102.002";
+  const accountId2 = "102.003";
   const tanggalAwal = `${year}-${month}-${day}`;
   const tanggalAkhir = `${year}-${month}-${day}`;
 
@@ -59,12 +60,12 @@ export const qrisCheck = async (req, res) => {
         journaltrans.accountid = account.id 
     WHERE 
         journaltrans.credit > 0 
-        AND journaltrans.accountid <> '${accountId}' 
+        AND journaltrans.accountid NOT IN ('${accountId}', '${accountId2}')
         AND journaltrans.jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59' 
         AND journaltrans.jtid IN (
             SELECT jtid 
             FROM journaltrans 
-            WHERE accountid = '${accountId}' 
+            WHERE accountid IN ('${accountId}', '${accountId2}')
             AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59');`;
 
   const queryPerubahanKasKeluar = `
@@ -87,12 +88,12 @@ export const qrisCheck = async (req, res) => {
         journaltrans.accountid = account.id 
     WHERE 
         journaltrans.debit > 0 
-        AND journaltrans.accountid <> '${accountId}' 
+        AND journaltrans.accountid NOT IN ('${accountId}', '${accountId2}')
         AND journaltrans.jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59'
         AND journaltrans.jtid IN (
             SELECT jtid 
             FROM journaltrans 
-            WHERE accountid = '${accountId}' 
+            WHERE accountid IN ('${accountId}', '${accountId2}')
             AND jtdate BETWEEN '${tanggalAwal} 00:00:00' AND '${tanggalAkhir} 23:59:59');`;
 
   const querySaldoAkhir = `
