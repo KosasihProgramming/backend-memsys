@@ -1,51 +1,140 @@
-# Back End Node JS - Memsys
-
-## Deskripsi
-
-Proyek ini adalah back end untuk aplikasi Memsys, dibangun menggunakan Node.js dan Express. Proyek ini menangani berbagai operasi back-end, termasuk autentikasi, manajemen data pengguna, dan pengelolaan dokumen.
-
-## Lisensi
-
-Proyek ini dilisensikan di bawah lisensi MIT. Lihat file [LICENSE](LICENSE) untuk informasi lebih lanjut.
+# Dokumentasi Installasi - Backend Cashflow
 
 ## Dokumentasi API
 
-### API Login
+### Clone repository di github
+
+clone repository dari github
 
 ```bash
-POST http://localhost:5000/login
+    git clone https://github.com/KosasihProgramming/backend-memsys.git
 ```
 
-#### Request Body
+### Lakukan installasi library
 
 ```bash
-{
-  "username": "HG001.Hg",
-  "password": "1234",
-}
+    npm install
 ```
 
-### Mendapatkan Nama Akun
+### Konfigurasi Database
 
 ```bash
-GET http://localhost:5000/accounts
+    const dbConfig = {
+      host: "localhost",
+      user: "root",
+      password: "",
+      database: "nama_database",
+    };
+
+    const dbAuth = {
+      host: "localhost",
+      user: "root",
+      password: "",
+      database: "nama_database",
+    };
 ```
 
-### Mencari Cashflow (Arus kas)
+copy kode dari project lama (Backend Cashflow pertama) untuk mengganti kode diatas
+
+### Analisis pendapatan klinik (Klinik, Lab, Gigi)
+
+Lihat di dokumentasi pdf yang sudah disiapkan
+
+### Siapkan id akun yang dibutuhkan
 
 ```bash
-POST http://localhost:5000/arus-kas
+1. ID Akun insert jurnal
+    ID Piutang Karyawan
+    ID Pendapatan Lain-lain
+2. ID AKun QRIS
+    ID QRIS
+    ID Akun Debit
+3. ID Akun Pendapatan (Sesuaikan dengan klinik)
+    ID Pendapatan barang klinik,
+    ID Pendapatan jasa klinik,
+    ID Pendapatan barang lab,
+    ID Pendapatan jasa lab,
+    ID Pendapatan barang gigi,
+    ID Pendapatan jasa gigi,
 ```
 
-#### Request Body
+jika sudah disiapkan, lanjutkan ke tahap
+
+### Table Migration
+
+Buka file dengan nama <b>CreateTableController.js</b> kemudan edit kode bagian
 
 ```bash
-{
-  "tanggalAwal": "YYYY/MM/DD",
-  "tanggalAkhir": "YYYY/MM/DD",
-  "accountId": "101.002",
-  "username": "HG001.Hg"
-}
+    // await connection.query(createTableRiwayatCheck);
+    // await connection.query(createTableRiwayat);
+    // await connection.query(createTableAkunJurnal);
+    // await connection.query(createTableAkunQris);
+    // await connection.query(createTableAkunPendapatan);
 ```
 
-Copyright © 2024 klinikkosasih.com
+uncoment semua kode di atas, kemudian jalankan di browser
+
+```bash
+    localhost:5000/table-migration
+```
+
+### Table Seeding
+
+Masih di file <b>CreateTableController.js</b> kemudian edit kode bagian
+
+```bash
+    const insertAkunJurnal;
+    const insertAkunQris;
+    const insertAkunPendapatan
+```
+
+ganti value nya sesuai dengan id yang sudah disiapkan, gantilah id_akun dan nama_akun saja.
+
+setelah itu, lanjutkan ke kode
+
+```bash
+    // await connection.query(insertAkunJurnal);
+    // await connection.query(insertAkunQris);
+    // await connection.query(insertAkunPendapatan);
+```
+
+uncoment pada kode tersebut, kemudian jalankan
+
+```bash
+    localhost:5000/table-seeding
+```
+
+jika sudah berhasil, lanjut ke tahap
+
+### Memperbaiki Query Divisi
+
+cari kode yang berisikan kata kunci divison, kemudian ganti value nya sesuai dengan division di klinik
+
+list file yang harus di perbaiki query divisi
+
+```bash
+    1. JournalController.js
+    2. PendapatanController.js
+```
+
+### Memperbaiki QRIS Check
+
+buka file dengan nama <b>QrisCheckController.js</b>
+
+kemudian edit pada kode
+
+```bash
+    const accountId = "102.002";
+    const accountId2 = "102.003";
+```
+
+isi value nya dengan id yang sudah kita siapkan
+
+## Selesai
+
+Installasi berhasil dilakukan dengan benar, jika ada kendala, silahkan hubungi saya
+
+```bash
+    Komang Chandra Winata
+    Telegram: @komang_chandra
+```

@@ -1,11 +1,11 @@
 import mysql from "mysql2";
 
 // const dbConfig = {
-//   host: "26.142.134.35",
+//   host: "26.45.147.210",
 //   port: "6033",
 //   user: "aris",
 //   password: "aksa0502",
-//   database: "db_accrajabasa",
+//   database: "db_acckemiling",
 // };
 
 const dbConfig = {
