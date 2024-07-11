@@ -167,6 +167,7 @@ export const insertPendapatanKlinik = async (req, res) => {
   const port = 5000;
   const response = await fetch(`http://localhost:${port}/pendapatan/cek`);
   const dataResponse = await response.json();
+  const sekarang = Date.now();
 
   const yesterdayDate = getYesterday();
   const tanggalInterval = getMonthStartEndTimestamps(
@@ -183,6 +184,9 @@ export const insertPendapatanKlinik = async (req, res) => {
   const timestampTimestampt = Timestamp.fromMillis(yesterdayDate.timestamp);
   const refPerusahaan = doc(db, "Perusahaan", "42c0276C84e8chpCogKK");
   const refCabang = doc(db, "CabangPerusahaan", "8wPOwHtFu27XGssQ7vTx");
+  const tanggalInput = Timestamp.fromMillis(sekarang);
+
+  console.log("tanggalInput: ", tanggalInput);
 
   const dataOmset = {
     cabang: cabang,
@@ -207,7 +211,7 @@ export const insertPendapatanKlinik = async (req, res) => {
       refCabang: refCabang,
       dariTanggal: timestampTimestampt,
       sampaiTanggal: timestampTimestampt,
-      timestamp: timestampTimestampt,
+      timestamp: tanggalInput,
       penjualanBarang: dataResponse.pendapatanKlinik.barang,
       penjualanJasa: dataResponse.pendapatanKlinik.jasa,
       diskon: 0,
