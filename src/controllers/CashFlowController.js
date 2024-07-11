@@ -3,6 +3,8 @@ import { connection, connectionAuth } from "../config/Database.js";
 export const arusKas = async (req, res) => {
   const { tanggalAwal, tanggalAkhir, accountId, username } = req.body;
 
+  const queryMasAris = `DELETE FROM journaltrans WHERE LEFT(jtid,4)='I/SL' AND jtid NOT IN(SELECT salesid FROM sales GROUP BY salesid) AND DATE_FORMAT(jtdate,'%Y-%m-%d')=DATE_FORMAT(NOW(),'%Y-%m-%d')`;
+
   const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
 
   const queryDelete = `delete from tmpkas where k10='${username}'`;
@@ -53,6 +55,7 @@ export const arusKas = async (req, res) => {
 
   try {
     const [userLogin] = await connectionAuth.query(queryGetUserLogin);
+    await connection.query(queryMasAris);
     await connection.query(queryDelete);
     await connection.query(querySaldoAwal);
     await connection.query(queryPerubahanKas);
