@@ -16,7 +16,7 @@ export const qrisCheck = async (req, res) => {
 
   const queryGetUserLogin = `SELECT * FROM user_memsys WHERE user_name='${username}' AND aktif='1';`;
 
-  const queryDelete = `delete from tmpkas where k10='HG001.Hg';`;
+  const queryDelete = `delete from tmpkas where k10='${username}';`;
 
   const querySaldoAwal = `
     INSERT INTO tmpkas (k01, k02, k03, k04, k05, k06, k07, k08, k10)
