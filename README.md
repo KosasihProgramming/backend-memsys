@@ -138,3 +138,12 @@ Installasi berhasil dilakukan dengan benar, jika ada kendala, silahkan hubungi s
     Komang Chandra Winata
     Telegram: @komang_chandra
 ```
+
+kenapa?
+tdi ada yg bayar cash mana aku ngga dandan sama sekali kay gembel
+
+gembel aku,
+
+tetep cantik kok
+
+wait ya

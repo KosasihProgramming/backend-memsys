@@ -26,14 +26,14 @@ export const getAllPendapatan = async (req, res) => {
   const idPendapatanJasaLab = akunPendapatan[3].id_akun;
   const idPendapatanBarangGigi = 1;
   const idPendapatanJasaGigi = 2;
-  // console.log({
-  //   barangKlinik: idPendapatanBarangKlinik,
-  //   jasaKlinik: idPendapatanJasaKlinik,
-  //   barangLab: idPendapatanBarangLab,
-  //   jasaLab: idPendapatanJasaLab,
-  //   barangGigi: idPendapatanBarangGigi,
-  //   jasaGigi: idPendapatanJasaGigi,
-  // });
+  console.log({
+    barangKlinik: idPendapatanBarangKlinik,
+    jasaKlinik: idPendapatanJasaKlinik,
+    barangLab: idPendapatanBarangLab,
+    jasaLab: idPendapatanJasaLab,
+    barangGigi: idPendapatanBarangGigi,
+    jasaGigi: idPendapatanJasaGigi,
+  });
 
   const queryNamaPerusahaan = `select name from company;`;
 
@@ -43,7 +43,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanBarangKlinik}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   const queryGetPendapatanJasaKlinik = `
     SELECT SUM(debit - credit) AS balance
@@ -51,7 +51,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanJasaKlinik}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   const queryGetPendapatanBarangLab = `
     SELECT SUM(debit - credit) AS balance
@@ -59,7 +59,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanBarangLab}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   const queryGetPendapatanJasaLab = `
     SELECT SUM(debit - credit) AS balance
@@ -67,7 +67,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanJasaLab}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   const queryGetPendapatanBarangGigi = `
     SELECT SUM(debit - credit) AS balance
@@ -75,7 +75,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanBarangGigi}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   const queryGetPendapatanJasaGigi = `
     SELECT SUM(debit - credit) AS balance
@@ -83,7 +83,7 @@ export const getAllPendapatan = async (req, res) => {
     WHERE approved = 1
       AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
       AND accountid = '${idPendapatanJasaGigi}'
-      AND division IN ('0011');`;
+      AND division IN ('1');`;
 
   try {
     const [namaPerusahaan] = await connection.query(queryNamaPerusahaan);
@@ -105,8 +105,6 @@ export const getAllPendapatan = async (req, res) => {
     const [pendapatanJasaGigi] = await connection.query(
       queryGetPendapatanJasaGigi
     );
-
-    console.log(pendapatanBarangKlinik);
 
     res.json({
       status: "Success",
@@ -199,7 +197,7 @@ export const insertPendapatanKlinik = async (req, res) => {
     tanggalMulai: timestampTanggalMulai,
     tanggalBerakhir: timestampTanggalBerakhir,
     timestampt: timestampTimestampt,
-    targetOmset: 200000000,
+    targetOmset: 0,
     totalBarang: 0,
     totalJasa: 0,
     totalDiskon: 0,
@@ -232,7 +230,7 @@ export const insertPendapatanKlinik = async (req, res) => {
 
     let docRef;
     if (existingDocRef) {
-      docRef = existingDocRef;
+      docRef = existingDocRef.ref;
     } else {
       docRef = doc(collection(db, "dates"));
       await setDoc(docRef, dataOmset);
@@ -283,11 +281,11 @@ export const insertPendapatanLab = async (req, res) => {
     tanggalMulai: timestampTanggalMulai,
     tanggalBerakhir: timestampTanggalBerakhir,
     timestampt: timestampTimestampt,
-    targetOmset: null,
-    totalBarang: null,
-    totalJasa: null,
+    targetOmset: 0,
+    totalBarang: 0,
+    totalJasa: 0,
     totalDiskon: 0,
-    totalOmset: null,
+    totalOmset: 0,
   };
 
   const penjualanHarian = [
@@ -315,7 +313,7 @@ export const insertPendapatanLab = async (req, res) => {
 
     let docRef;
     if (existingDocRef) {
-      docRef = existingDocRef;
+      docRef = existingDocRef.ref;
     } else {
       docRef = doc(collection(db, "dates"));
       await setDoc(docRef, dataOmset);
@@ -366,11 +364,11 @@ export const insertPendapatanGigi = async (req, res) => {
     tanggalMulai: timestampTanggalMulai,
     tanggalBerakhir: timestampTanggalBerakhir,
     timestampt: timestampTimestampt,
-    targetOmset: null,
-    totalBarang: null,
-    totalJasa: null,
+    targetOmset: 0,
+    totalBarang: 0,
+    totalJasa: 0,
     totalDiskon: 0,
-    totalOmset: null,
+    totalOmset: 0,
   };
 
   const penjualanHarian = [
@@ -398,7 +396,7 @@ export const insertPendapatanGigi = async (req, res) => {
 
     let docRef;
     if (existingDocRef) {
-      docRef = existingDocRef;
+      docRef = existingDocRef.ref;
     } else {
       docRef = doc(collection(db, "dates"));
       await setDoc(docRef, dataOmset);
@@ -430,7 +428,7 @@ export const updatePendapatanKlinik = async (req, res) => {
 
   try {
     // Calculate totals from subcollection
-    const { totalPenjualanBarang, totalPenjualanJasa, totalOmset, float } =
+    const { totalPenjualanBarang, totalPenjualanJasa, totalOmset } =
       await calculateSubcollectionTotals(String(year), month, cabang);
 
     // Reference to the parent document
@@ -450,6 +448,24 @@ export const updatePendapatanKlinik = async (req, res) => {
     const refPerusahaan = doc(db, "Perusahaan", "42c0276C84e8chpCogKK");
     const refCabang = doc(db, "CabangPerusahaan", "5ZyEspshfwTuFooWjDf1");
 
+    const dataPenjualan = docRef.data[0];
+    const totalNilai =
+      parseFloat(dataPenjualan.totalOmset) +
+      parseFloat(totalPenjualanBarang) +
+      parseFloat(totalPenjualanJasa);
+    let totalPersen = 0;
+
+    if (dataPenjualan.targetOmset > 0) {
+      totalPersen =
+        ((parseFloat(dataPenjualan.totalOmset) +
+          parseFloat(totalPenjualanBarang) +
+          parseFloat(totalPenjualanJasa)) /
+          dataPenjualan.targetOmset) *
+        100;
+    } else {
+      totalPersen = 0;
+    }
+
     const dataOmset = {
       cabang: cabang,
       refPerusahaan: refPerusahaan,
@@ -459,16 +475,16 @@ export const updatePendapatanKlinik = async (req, res) => {
       tanggalMulai: timestampTanggalMulai,
       tanggalBerakhir: timestampTanggalBerakhir,
       timestampt: timestampTimestampt,
-      // targetOmset: null,
+      targetOmset: null,
       totalBarang: totalPenjualanBarang,
       totalJasa: totalPenjualanJasa,
       totalDiskon: 0,
-      totalOmset: totalOmset,
-      persentaseCapaian: float,
+      totalOmset: totalNilai,
+      persentaseCapaian: totalPersen,
     };
 
     // Update the parent document
-    await updateDoc(docRef, dataOmset);
+    await updateDoc(docRef.ref, dataOmset);
 
     res
       .status(200)
@@ -513,6 +529,24 @@ export const updatePendapatanLab = async (req, res) => {
     const refPerusahaan = doc(db, "Perusahaan", "42c0276C84e8chpCogKK");
     const refCabang = doc(db, "CabangPerusahaan", "5ZyEspshfwTuFooWjDf1");
 
+    const dataPenjualan = docRef.data[0];
+    const totalNilai =
+      parseFloat(dataPenjualan.totalOmset) +
+      parseFloat(totalPenjualanBarang) +
+      parseFloat(totalPenjualanJasa);
+    let totalPersen = 0;
+
+    if (dataPenjualan.targetOmset > 0) {
+      totalPersen =
+        ((parseFloat(dataPenjualan.totalOmset) +
+          parseFloat(totalPenjualanBarang) +
+          parseFloat(totalPenjualanJasa)) /
+          dataPenjualan.targetOmset) *
+        100;
+    } else {
+      totalPersen = 0;
+    }
+
     const dataOmset = {
       cabang: cabang,
       refPerusahaan: refPerusahaan,
@@ -526,11 +560,12 @@ export const updatePendapatanLab = async (req, res) => {
       totalBarang: totalPenjualanBarang,
       totalJasa: totalPenjualanJasa,
       totalDiskon: 0,
-      totalOmset: totalOmset,
+      totalOmset: totalNilai,
+      persentaseCapaian: totalPersen,
     };
 
     // Update the parent document
-    await updateDoc(docRef, dataOmset);
+    await updateDoc(docRef.ref, dataOmset);
 
     res
       .status(200)
@@ -574,6 +609,24 @@ export const updatePendapatanGigi = async (req, res) => {
     const refPerusahaan = doc(db, "Perusahaan", "42c0276C84e8chpCogKK");
     const refCabang = doc(db, "CabangPerusahaan", "5ZyEspshfwTuFooWjDf1");
 
+    const dataPenjualan = docRef.data[0];
+    const totalNilai =
+      parseFloat(dataPenjualan.totalOmset) +
+      parseFloat(totalPenjualanBarang) +
+      parseFloat(totalPenjualanJasa);
+    let totalPersen = 0;
+
+    if (dataPenjualan.targetOmset > 0) {
+      totalPersen =
+        ((parseFloat(dataPenjualan.totalOmset) +
+          parseFloat(totalPenjualanBarang) +
+          parseFloat(totalPenjualanJasa)) /
+          dataPenjualan.targetOmset) *
+        100;
+    } else {
+      totalPersen = 0;
+    }
+
     const dataOmset = {
       cabang: cabang,
       refPerusahaan: refPerusahaan,
@@ -587,11 +640,12 @@ export const updatePendapatanGigi = async (req, res) => {
       totalBarang: totalPenjualanBarang,
       totalJasa: totalPenjualanJasa,
       totalDiskon: 0,
-      totalOmset: totalOmset,
+      totalOmset: totalNilai,
+      persentaseCapaian: totalPersen,
     };
 
     // Update the parent document
-    await updateDoc(docRef, dataOmset);
+    await updateDoc(docRef.ref, dataOmset);
 
     res.status(200).json({ message: "Memperbarui data omset berhasil." });
 
@@ -613,26 +667,11 @@ export const checkExistingDocument = async (year, month, cabang) => {
 
   const querySnapshot = await getDocs(q);
   if (!querySnapshot.empty) {
-    return querySnapshot.docs[0].ref;
-  } else {
-    return null;
-  }
-};
+    const doc = querySnapshot.docs[0];
 
-export const checkExistingDocument2 = async (year, month, cabang) => {
-  const q = query(
-    collection(db, "dates"),
-    where("tahun", "==", year),
-    where("bulan", "==", month),
-    where("cabang", "==", cabang)
-  );
+    console.log({ dataaaa: doc.data() });
 
-  const querySnapshot = await getDocs(q);
-  if (!querySnapshot.empty) {
-    return {
-      ref: querySnapshot.docs[0].ref,
-      data: querySnapshot.docs[0].data(),
-    };
+    return { data: doc.data(), ref: doc.ref };
   } else {
     return null;
   }
@@ -640,18 +679,13 @@ export const checkExistingDocument2 = async (year, month, cabang) => {
 
 const calculateSubcollectionTotals = async (year, month, cabang) => {
   try {
-    const docRef = await checkExistingDocument2(year, month, cabang);
-
-    const targetOmset = docRef.data.targetOmset;
-
+    const docRef = await checkExistingDocument(year, month, cabang);
     if (!docRef) {
       throw new Error(`Document for ${cabang} in ${month}/${year} not found.`);
     }
 
     // Get all documents from subcollection "penjualanHarian"
-    const querySnapshot = await getDocs(
-      collection(docRef.ref, "penjualanHarian")
-    );
+    const querySnapshot = await getDocs(collection(docRef, "penjualanHarian"));
     let totalPenjualanBarang = 0;
     let totalPenjualanJasa = 0;
     let totalOmset = 0;
@@ -664,25 +698,10 @@ const calculateSubcollectionTotals = async (year, month, cabang) => {
       totalOmset += data.omset || 0;
     });
 
-    let totalPersen = 0;
-    console.log("Target Omset = ", targetOmset);
-    console.log("Total Omset = ", totalOmset);
-
-    if (targetOmset > 0) {
-      totalPersen = (parseFloat(totalOmset) / targetOmset) * 100;
-    } else {
-      totalPersen = 0;
-    }
-
-    console.log("total Persen= ", parseFloat(totalPersen));
-
-    const float = parseFloat(totalPersen);
-
     return {
       totalPenjualanBarang,
       totalPenjualanJasa,
       totalOmset,
-      float,
     };
   } catch (error) {
     console.error("Error calculating subcollection totals:", error);

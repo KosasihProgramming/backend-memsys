@@ -2,3 +2,19 @@ pm2 start D:\Kosasih Pusat\Memsys\backend-memsys\app.js --name server-memsys
 
 /src/config/Database.js
 /src/config/CatatanDatabase.txt
+
+
+
+
+
+unya ku ndak bisa, punya zul juga ndak bisa
+
+aku bisa tu
+
+yaudah, punyamu keren berarti.
+
+
+chatingan lewat coding, kwkwkwk
+wkwwk 
+
+ini tak tunjukin lebih keren

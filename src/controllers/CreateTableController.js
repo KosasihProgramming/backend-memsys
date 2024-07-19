@@ -68,7 +68,7 @@ export const createTable = async (req, res) => {
   `;
 
   // const createTable = `
-  //   CREATE TABLE IF NOT EXISTS akun_pendapatan (
+  //   CREATE TABLE IF NOT EXISTS akun_pendapatan_bpjs (
   //     id INT AUTO_INCREMENT PRIMARY KEY,
   //     id_akun CHAR(11) NOT NULL,
   //     nama_akun VARCHAR(255) NOT NULL,
@@ -129,12 +129,18 @@ export const seedingTable = async (req, res) => {
           (6, '401.012', 'Pendapatan jasa gigi', 'jasa gigi');
   `;
 
+  const insertAkunPendapatanBPJS = `
+    INSERT INTO akun_pendapatan (id, id_akun, nama_akun, keterangan)
+    VALUES (7, '104.006', 'Piutang Bpjs Kesehatan', 'bpjs');
+  `;
+
   try {
     // await connection.query(insertModal);
     // await connection.query(insertAkunSetor);
     // await connection.query(insertAkunJurnal);
     // await connection.query(insertAkunQris);
     // await connection.query(insertAkunPendapatan);
+    await connection.query(insertAkunPendapatanBPJS);
     res.json({
       status: "Success",
       message: "Seeding Success",

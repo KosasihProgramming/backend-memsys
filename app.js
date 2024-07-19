@@ -14,6 +14,7 @@ import JournalRoute from "./src/routes/JournalRoute.js";
 import HistoryCheckRoute from "./src/routes/HistoryCheckRoute.js";
 import QrisCheck from "./src/routes/QrisCheckRoute.js";
 import PendapatanRoute from "./src/routes/PendapatanRoute.js";
+import BpjsRoute from "./src/routes/BpjsRoute.js";
 
 const app = express();
 const port = 5000;
@@ -30,6 +31,7 @@ app.use(JournalRoute);
 app.use(HistoryCheckRoute);
 app.use(QrisCheck);
 app.use(PendapatanRoute);
+app.use(BpjsRoute);
 
 // Pendapatan Route setiap jam 8 pagi
 cron.schedule("0 7 * * *", async () => {
