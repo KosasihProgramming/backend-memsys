@@ -10,7 +10,9 @@ export const uangKurang = async (req, res) => {
   const queryReftransaction = `SELECT journalentryidno FROM division`;
 
   const [akunJurnal] = await connection.query(querySelectAcount);
+  // console.log(querySelectAcount);
   const idAkunPiutang = akunJurnal[0].id_akun;
+  // console.log(akunJurnal);
 
   const journalentryidno = await connection.query(queryReftransaction);
   const reftransaction = journalentryidno[0];

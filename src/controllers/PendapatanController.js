@@ -24,8 +24,8 @@ export const getAllPendapatan = async (req, res) => {
   const idPendapatanJasaKlinik = akunPendapatan[1].id_akun;
   const idPendapatanBarangLab = akunPendapatan[2].id_akun;
   const idPendapatanJasaLab = akunPendapatan[3].id_akun;
-  const idPendapatanBarangGigi = 1;
-  const idPendapatanJasaGigi = 2;
+  const idPendapatanBarangGigi = akunPendapatan[4].id_akun;
+  const idPendapatanJasaGigi = akunPendapatan[5].id_akun;
   // console.log({
   //   barangKlinik: idPendapatanBarangKlinik,
   //   jasaKlinik: idPendapatanJasaKlinik,
@@ -41,7 +41,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanBarangKlinik}'
       AND division IN ('0011');`;
 
@@ -49,7 +49,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanJasaKlinik}'
       AND division IN ('0011');`;
 
@@ -57,7 +57,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanBarangLab}'
       AND division IN ('0011');`;
 
@@ -65,7 +65,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanJasaLab}'
       AND division IN ('0011');`;
 
@@ -73,7 +73,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanBarangGigi}'
       AND division IN ('0011');`;
 
@@ -81,7 +81,7 @@ export const getAllPendapatan = async (req, res) => {
     SELECT SUM(debit - credit) AS balance
     FROM journaltrans
     WHERE approved = 1
-      AND DATE(jtdate) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)
+      AND DATE(jtdate) = CURDATE()
       AND accountid = '${idPendapatanJasaGigi}'
       AND division IN ('0011');`;
 
